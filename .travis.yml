@@ -1,0 +1,8 @@
+language: r
+cache: packages
+
+notifications:
+  slack: dide-hiv:lZajIW2gCbXMYVgXkp1Bu1ii
+  email:
+    on_success: change
+    on_failure: change
