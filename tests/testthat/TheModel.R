@@ -104,16 +104,6 @@ ComplexCascade <- function(t, y, parms) {
             ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["Dx_50"]])
         ) * parms[["Theta"]]) +
 
-        (( # PreLtfu * THETA
-            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * parms[["s_1"]] * y[["PreLtfu_500"]]) +
-            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * parms[["s_2"]] * y[["PreLtfu_350500"]]) +
-            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * parms[["s_3"]] * y[["PreLtfu_250350"]]) +
-            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * parms[["s_4"]] * y[["PreLtfu_200250"]]) +
-            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_5"]] * y[["PreLtfu_100200"]]) +
-            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_6"]] * y[["PreLtfu_50100"]]) +
-            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["PreLtfu_50"]])
-        ) * parms[["Theta"]]) +
-
         ((y[["Dx_500"]] +
           y[["Dx_350500"]] +
           y[["Dx_250350"]] +
