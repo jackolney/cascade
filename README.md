@@ -16,4 +16,9 @@ This model forms the basis of the shiny application available online [here](http
 
 - Bug fix for `CumInit` to include persons initiating through side door
 
+### v1.2
+
+- Bug fix for all cumulative functions incorporating persons moving through care via side door
+- Impacts: `CumDiag`, `CumLink`, `CumPreL`, `CumInit`, `CumAdhr`, `CumLos`
+
 Copyright 2016 Jack Olney

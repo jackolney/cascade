@@ -1,6 +1,6 @@
 Package: cascade
 Title: Cascade Model
-Version: 1.1
+Version: 1.2
 Authors@R: person("Jack", "Olney", email = "jack.olney11@imperial.ac.uk", role = c("aut", "cre"))
 Author: Jack Olney
 Maintainer: Jack Olney <jack.olney11@imperial.ac.uk>
