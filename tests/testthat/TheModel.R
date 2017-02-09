@@ -61,9 +61,84 @@ ComplexCascade <- function(t, y, parms) {
     dHivMortality     <- parms[["Alpha_1"]] * (y[["UnDx_500"]] + y[["Dx_500"]] + y[["Care_500"]] + y[["PreLtfu_500"]] + y[["Tx_Na_500"]]) + parms[["Alpha_2"]] * (y[["UnDx_350500"]] + y[["Dx_350500"]] + y[["Care_350500"]] + y[["PreLtfu_350500"]] + y[["Tx_Na_350500"]]) + parms[["Alpha_3"]] * (y[["UnDx_250350"]] + y[["Dx_250350"]] + y[["Care_250350"]] + y[["PreLtfu_250350"]] + y[["Tx_Na_250350"]]) + parms[["Alpha_4"]] * (y[["UnDx_200250"]] + y[["Dx_200250"]] + y[["Care_200250"]] + y[["PreLtfu_200250"]] + y[["Tx_Na_200250"]]) + parms[["Alpha_5"]] * (y[["UnDx_100200"]] + y[["Dx_100200"]] + y[["Care_100200"]] + y[["PreLtfu_100200"]] + y[["Tx_Na_100200"]]) + parms[["Alpha_6"]] * (y[["UnDx_50100"]] + y[["Dx_50100"]] + y[["Care_50100"]] + y[["PreLtfu_50100"]] + y[["Tx_Na_50100"]]) + parms[["Alpha_7"]] * (y[["UnDx_50"]] + y[["Dx_50"]] + y[["Care_50"]] + y[["PreLtfu_50"]] + y[["Tx_Na_50"]]) + parms[["Tau_1"]] * y[["Tx_A_500"]] + parms[["Tau_2"]] * y[["Tx_A_350500"]] + parms[["Tau_3"]] * y[["Tx_A_250350"]] + parms[["Tau_4"]] * y[["Tx_A_200250"]] + parms[["Tau_5"]] * y[["Tx_A_100200"]] + parms[["Tau_6"]] * y[["Tx_A_50100"]] + parms[["Tau_7"]] * y[["Tx_A_50"]]
     dNaturalMortality <- parms[["Mu"]] *      (y[["UnDx_500"]] + y[["UnDx_350500"]] + y[["UnDx_250350"]] + y[["UnDx_200250"]] + y[["UnDx_100200"]] + y[["UnDx_50100"]] + y[["UnDx_50"]] + y[["Dx_500"]] + y[["Dx_350500"]] + y[["Dx_250350"]] + y[["Dx_200250"]] + y[["Dx_100200"]] + y[["Dx_50100"]] + y[["Dx_50"]] + y[["Care_500"]] + y[["Care_350500"]] + y[["Care_250350"]] + y[["Care_200250"]] + y[["Care_100200"]] + y[["Care_50100"]] + y[["Care_50"]] + y[["PreLtfu_500"]] + y[["PreLtfu_350500"]] + y[["PreLtfu_250350"]] + y[["PreLtfu_200250"]] + y[["PreLtfu_100200"]] + y[["PreLtfu_50100"]] + y[["PreLtfu_50"]] + y[["Tx_Na_500"]] + y[["Tx_Na_350500"]] + y[["Tx_Na_250350"]] + y[["Tx_Na_200250"]] + y[["Tx_Na_100200"]] + y[["Tx_Na_50100"]] + y[["Tx_Na_50"]] + y[["Tx_A_500"]] + y[["Tx_A_350500"]] + y[["Tx_A_250350"]] + y[["Tx_A_200250"]] + y[["Tx_A_100200"]] + y[["Tx_A_50100"]] + y[["Tx_A_50"]] + y[["Ltfu_500"]] + y[["Ltfu_350500"]] + y[["Ltfu_250350"]] + y[["Ltfu_200250"]] + y[["Ltfu_100200"]] + y[["Ltfu_50100"]] + y[["Ltfu_50"]])
 
-    dCumDiag <- (y[["UnDx_500"]] + y[["UnDx_350500"]] + y[["UnDx_250350"]] + y[["UnDx_200250"]] + y[["UnDx_100200"]] + y[["UnDx_50100"]] + y[["UnDx_50"]]) * parms[["Rho"]]
-    dCumLink <- (y[["Dx_500"]]   + y[["Dx_350500"]]   + y[["Dx_250350"]]   + y[["Dx_200250"]]   + y[["Dx_100200"]]   + y[["Dx_50100"]]   + y[["Dx_50"]])   * (parms[["Epsilon"]] * parms[["q"]])
-    dCumPreL <- (y[["Care_500"]] + y[["Care_350500"]] + y[["Care_250350"]] + y[["Care_200250"]] + y[["Care_100200"]] + y[["Care_50100"]] + y[["Care_50"]]) * parms[["Kappa"]]
+    # Cumulative Stuff
+    # CumDiag now includes those initiating ART from UnDx (as they obviously get diagnosed too)
+    dCumDiag <-
+        (( # UnDx * THETA
+            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * parms[["s_1"]] * y[["UnDx_500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * parms[["s_2"]] * y[["UnDx_350500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * parms[["s_3"]] * y[["UnDx_250350"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * parms[["s_4"]] * y[["UnDx_200250"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_5"]] * y[["UnDx_100200"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_6"]] * y[["UnDx_50100"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["UnDx_50"]])
+        ) * parms[["Theta"]]) +
+
+        ((y[["UnDx_500"]] +
+          y[["UnDx_350500"]] +
+          y[["UnDx_250350"]] +
+          y[["UnDx_200250"]] +
+          y[["UnDx_100200"]] +
+          y[["UnDx_50100"]] +
+          y[["UnDx_50"]]) * parms[["Rho"]])
+
+    # CumLink now includes those initiating ART from UnDx and Dx (as they obviously link too)
+    dCumLink <-
+        (( # UnDx * THETA
+            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * parms[["s_1"]] * y[["UnDx_500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * parms[["s_2"]] * y[["UnDx_350500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * parms[["s_3"]] * y[["UnDx_250350"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * parms[["s_4"]] * y[["UnDx_200250"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_5"]] * y[["UnDx_100200"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_6"]] * y[["UnDx_50100"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["UnDx_50"]])
+        ) * parms[["Theta"]]) +
+
+        (( # Dx * THETA
+            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * parms[["s_1"]] * y[["Dx_500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * parms[["s_2"]] * y[["Dx_350500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * parms[["s_3"]] * y[["Dx_250350"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * parms[["s_4"]] * y[["Dx_200250"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_5"]] * y[["Dx_100200"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_6"]] * y[["Dx_50100"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["Dx_50"]])
+        ) * parms[["Theta"]]) +
+
+        (( # PreLtfu * THETA
+            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * parms[["s_1"]] * y[["PreLtfu_500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * parms[["s_2"]] * y[["PreLtfu_350500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * parms[["s_3"]] * y[["PreLtfu_250350"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * parms[["s_4"]] * y[["PreLtfu_200250"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_5"]] * y[["PreLtfu_100200"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_6"]] * y[["PreLtfu_50100"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["PreLtfu_50"]])
+        ) * parms[["Theta"]]) +
+
+        ((y[["Dx_500"]] +
+          y[["Dx_350500"]] +
+          y[["Dx_250350"]] +
+          y[["Dx_200250"]] +
+          y[["Dx_100200"]] +
+          y[["Dx_50100"]] +
+          y[["Dx_50"]]) * (parms[["Epsilon"]] * parms[["q"]]))
+
+    # CumPreL now includes those that don't successfully link to care
+    dCumPreL <-
+        ((y[["Dx_500"]] +
+          y[["Dx_350500"]] +
+          y[["Dx_250350"]] +
+          y[["Dx_200250"]] +
+          y[["Dx_100200"]] +
+          y[["Dx_50100"]] +
+          y[["Dx_50"]]) * (parms[["Epsilon"]] * (1-parms[["q"]]))) +
+
+        ((y[["Care_500"]] +
+          y[["Care_350500"]] +
+          y[["Care_250350"]] +
+          y[["Care_200250"]] +
+          y[["Care_100200"]] +
+          y[["Care_50100"]] +
+          y[["Care_50"]]) * parms[["Kappa"]])
 
     # Expanded CumInit to include those initiating ART through the side-door
     dCumInit <-
@@ -117,8 +192,82 @@ ComplexCascade <- function(t, y, parms) {
             ((as.integer(ceiling(t)) >= parms[["t_5"]]) * y[["Care_50"]])
         ) * parms[["Gamma"]])
 
-    dCumAdhr <- (y[["Tx_Na_500"]] + y[["Tx_Na_350500"]] + y[["Tx_Na_250350"]] + y[["Tx_Na_200250"]] + y[["Tx_Na_100200"]] + y[["Tx_Na_50100"]] + y[["Tx_Na_50"]]) * parms[["Sigma"]]
-    dCumLoss <- (y[["Tx_Na_500"]] + y[["Tx_Na_350500"]] + y[["Tx_Na_250350"]] + y[["Tx_Na_200250"]] + y[["Tx_Na_100200"]] + y[["Tx_Na_50100"]] + y[["Tx_Na_50"]] + y[["Tx_A_500"]] + y[["Tx_A_350500"]] + y[["Tx_A_250350"]] + y[["Tx_A_200250"]] + y[["Tx_A_100200"]] + y[["Tx_A_50100"]] + y[["Tx_A_50"]]) * parms[["Omega"]]
+    # Expanded to track all persons who initiate ART normally and become virally suppressed
+    dCumAdhr <-
+        # Sigma
+        ((y[["Tx_Na_500"]] +
+          y[["Tx_Na_350500"]] +
+          y[["Tx_Na_250350"]] +
+          y[["Tx_Na_200250"]] +
+          y[["Tx_Na_100200"]] +
+          y[["Tx_Na_50100"]] +
+          y[["Tx_Na_50"]]) * parms[["Sigma"]]) +
+
+        (( # Gamma * p * CARE
+            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * y[["Care_500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * y[["Care_350500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * y[["Care_250350"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * y[["Care_200250"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * y[["Care_100200"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * y[["Care_50100"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * y[["Care_50"]])
+        ) * parms[["Gamma"]] * parms[["p"]]) +
+
+        (( # Theta * p * UnDx
+            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * parms[["s_1"]] * y[["UnDx_500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * parms[["s_2"]] * y[["UnDx_350500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * parms[["s_3"]] * y[["UnDx_250350"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * parms[["s_4"]] * y[["UnDx_200250"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_5"]] * y[["UnDx_100200"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_6"]] * y[["UnDx_50100"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["UnDx_50"]])
+        ) * parms[["Theta"]] * parms[["p"]]) +
+
+        (( # Theta * p * Dx
+            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * parms[["s_1"]] * y[["Dx_500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * parms[["s_2"]] * y[["Dx_350500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * parms[["s_3"]] * y[["Dx_250350"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * parms[["s_4"]] * y[["Dx_200250"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_5"]] * y[["Dx_100200"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_6"]] * y[["Dx_50100"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["Dx_50"]])
+        ) * parms[["Theta"]] * parms[["p"]]) +
+
+        (( # Theta * p * PreLtfu
+            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * parms[["s_1"]] * y[["PreLtfu_500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * parms[["s_2"]] * y[["PreLtfu_350500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * parms[["s_3"]] * y[["PreLtfu_250350"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * parms[["s_4"]] * y[["PreLtfu_200250"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_5"]] * y[["PreLtfu_100200"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_6"]] * y[["PreLtfu_50100"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["PreLtfu_50"]])
+        ) * parms[["Theta"]] * parms[["p"]]) +
+
+        (( # Theta * p * Care
+            ((as.integer(ceiling(t)) >= parms[["t_1"]]) * parms[["s_1"]] * y[["Care_500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_2"]]) * parms[["s_2"]] * y[["Care_350500"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_3"]]) * parms[["s_3"]] * y[["Care_250350"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_4"]]) * parms[["s_4"]] * y[["Care_200250"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_5"]] * y[["Care_100200"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_6"]] * y[["Care_50100"]]) +
+            ((as.integer(ceiling(t)) >= parms[["t_5"]]) * parms[["s_7"]] * y[["Care_50"]])
+        ) * parms[["Theta"]] * parms[["p"]])
+
+    dCumLoss <-
+        (y[["Tx_Na_500"]] +
+         y[["Tx_Na_350500"]] +
+         y[["Tx_Na_250350"]] +
+         y[["Tx_Na_200250"]] +
+         y[["Tx_Na_100200"]] +
+         y[["Tx_Na_50100"]] +
+         y[["Tx_Na_50"]] +
+         y[["Tx_A_500"]] +
+         y[["Tx_A_350500"]] +
+         y[["Tx_A_250350"]] +
+         y[["Tx_A_200250"]] +
+         y[["Tx_A_100200"]] +
+         y[["Tx_A_50100"]] +
+         y[["Tx_A_50"]]) * parms[["Omega"]]
 
     # Costs
     dDx_Cost <- (parms[["Rho"]] * (y[["UnDx_500"]] + y[["UnDx_350500"]] + y[["UnDx_250350"]] + y[["UnDx_200250"]] + y[["UnDx_100200"]] + y[["UnDx_50100"]] + y[["UnDx_50"]])) * parms[["Dx_unitCost"]]
