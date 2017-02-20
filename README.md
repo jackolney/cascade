@@ -21,4 +21,8 @@ This model forms the basis of the shiny application available online [here](http
 - Bug fix for all cumulative functions incorporating persons moving through care via side door
 - Impacts: `CumDiag`, `CumLink`, `CumPreL`, `CumInit`, `CumAdhr`, `CumLos`
 
+### v1.3
+
+- Fix for CD4 weights to bring them inline with CROI 2017 calibration
+
 Copyright 2016 Jack Olney
