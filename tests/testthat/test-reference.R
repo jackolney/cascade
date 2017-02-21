@@ -117,5 +117,6 @@ test_that("Treatment Guidelines Test", {
     names(plist) <- c("r_par", "r_inc")
     theref <- as.data.frame(deSolve::ode(times = time, y = y, func = ComplexCascadeCalib, parms = p, inc = i))
     result <- as.data.frame(deSolve::ode(times = time, y = y, func = "calib_derivs", parms = plist, initfunc = "calib_initmod", dllname = "cascade"))
-    expect_equal(theref, result, check.attributes = FALSE, tolerance = 1e-8, info = "Treatment guidelines error.")
+    expect_equal(theref, result, check.attributes = FALSE, tolerance = 0.01, info = "Treatment
+       guidelines error.")
 })
