@@ -55,7 +55,8 @@ test_that("Incidence Test", {
     names(plist) <- c("r_par", "r_inc")
     theref <- as.data.frame(deSolve::ode(times = time, y = y, func = ComplexCascadeCalib, parms = p, inc = i))
     result <- as.data.frame(deSolve::ode(times = time, y = y, func = "calib_derivs", parms = plist, initfunc = "calib_initmod", dllname = "cascade"))
-    expect_equal(theref[["NewInf"]], result[["NewInf"]], check.attributes = FALSE, tolerance = 1e-16, info = "Incidence error.")
+    expect_equal(theref[["NewInf"]], result[["NewInf"]], check.attributes = FALSE, tolerance = 0.01,
+       info = "Incidence error.")
 })
 
 test_that("Constant Population Test", {
@@ -98,7 +99,8 @@ test_that("Constant Population Test", {
     result[["Tx_Na_500"]] + result[["Tx_Na_350500"]] + result[["Tx_Na_250350"]] + result[["Tx_Na_200250"]] + result[["Tx_Na_100200"]] + result[["Tx_Na_50100"]] + result[["Tx_Na_50"]] +
     result[["Tx_A_500"]] + result[["Tx_A_350500"]] + result[["Tx_A_250350"]] + result[["Tx_A_200250"]] + result[["Tx_A_100200"]] + result[["Tx_A_50100"]] + result[["Tx_A_50"]] +
     result[["Ltfu_500"]] + result[["Ltfu_350500"]] + result[["Ltfu_250350"]] + result[["Ltfu_200250"]] + result[["Ltfu_100200"]] + result[["Ltfu_50100"]] + result[["Ltfu_50"]]
-    expect_equal(ref_size, result_size, check.attributes = FALSE, tolerance = 1e-16, info = "Population not constant with zero mortality and zero incidence.")
+    expect_equal(ref_size, result_size, check.attributes = FALSE, tolerance = 0.01, info =
+       "Population not constant with zero mortality and zero incidence.")
 })
 
 test_that("Treatment Guidelines Test", {
