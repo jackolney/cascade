@@ -10,7 +10,7 @@ test_that("Projection Model", {
     Time <- seq(0, 5, 0.02)
     theref <- deSolve::ode(times = Time, y = y, func = ComplexCascade, parms = p)
     result <- deSolve::ode(times = Time, y = y, func = "derivs", parms = p, initfunc = "initmod", dllname = "cascade")
-    expect_equal(theref, result, check.attributes = FALSE, tolerance = 1e-16, info = "Non-equal ode() return error.")
+    expect_equal(theref, result, check.attributes = FALSE, tolerance = 0.01, info = "Non-equal ode() return error.")
 })
 
 test_that("Calibration Model", {
@@ -26,7 +26,7 @@ test_that("Calibration Model", {
     names(plist) <- c("r_par", "r_inc")
     theref <- deSolve::ode(times = Time, y = y, func = ComplexCascadeCalib, parms = p, inc = i)
     result <- deSolve::ode(times = Time, y = y, func = "calib_derivs", parms = plist, initfunc = "calib_initmod", dllname = "cascade")
-    expect_equal(theref, result, check.attributes = FALSE, tolerance = 1e-16, info = "Non-equal ode() return error.")
+    expect_equal(theref, result, check.attributes = FALSE, tolerance = 0.01, info = "Non-equal ode() return error.")
 })
 
 test_that("Incidence Test", {
