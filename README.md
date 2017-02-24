@@ -2,7 +2,7 @@
 
 ### An R package containing a deterministic model of the HIV care cascade written in C
 
-[![Build Status](https://travis-ci.org/jackolney/cascade.svg?branch=master)](https://travis-ci.org/jackolney/cascade) [![Build status](https://ci.appveyor.com/api/projects/status/n52cfy4gr3jgev3h/branch/master?svg=true)](https://ci.appveyor.com/project/jackolney/cascade/branch/master)
+[![Build Status](https://travis-ci.org/jackolney/cascade.svg?branch=master)](https://travis-ci.org/jackolney/cascade) [![Build status](https://ci.appveyor.com/api/projects/status/n52cfy4gr3jgev3h/branch/master?svg=true)](https://ci.appveyor.com/project/jackolney/cascade/branch/master) [![codecov](https://codecov.io/gh/jackolney/cascade/branch/master/graph/badge.svg)](https://codecov.io/gh/jackolney/cascade)
 
 This model forms the basis of the shiny application available online [here](https://jackolney.shinyapps.io/CascadeDashboard/), with the associated source code available [here](https://github.com/jackolney/CascadeDashboard).
 
